@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Open-Decks Geneva — Faire tourner !</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink:'#0a0a0f', panel:'#12121a', acid:'#c8ff00', viol:'#8b5cf6', rose:'#ff2d78' },
+    fontFamily: { display:['Archivo Black','system-ui','sans-serif'], body:['Inter','system-ui','sans-serif'] }
+  }}
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body{font-family:Inter,system-ui,sans-serif;background:#0a0a0f;color:#f4f4f5}
+  .font-display{font-family:'Archivo Black',sans-serif}
+  #bg-layer{position:fixed;inset:0;z-index:-2;background-size:cover;background-position:center;opacity:.28;transition:background-image .8s}
+  #bg-overlay{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 20% 0%,rgba(139,92,246,.25),transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(255,45,120,.18),transparent 55%),linear-gradient(rgba(10,10,15,.55),rgba(10,10,15,.92))}
+  .strobe{background:linear-gradient(90deg,#c8ff00,#8b5cf6,#ff2d78,#c8ff00);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:slide 8s linear infinite}
+  @keyframes slide{to{background-position:300% 0}}
+  .card{background:rgba(18,18,26,.82);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.09);border-radius:1rem}
+  .btn-acid{background:#c8ff00;color:#0a0a0f;font-weight:800;border-radius:.75rem;transition:.15s}
+  .btn-acid:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(200,255,0,.35)}
+  .btn-ghost{border:1px solid rgba(255,255,255,.2);border-radius:.75rem;transition:.15s}
+  .btn-ghost:hover{border-color:#c8ff00;color:#c8ff00}
+  input,select{color-scheme:dark}
+  .field{background:#0d0d14;border:1px solid rgba(255,255,255,.12);border-radius:.65rem;padding:.65rem .8rem;width:100%;outline:none}
+  .field:focus{border-color:#c8ff00;box-shadow:0 0 0 3px rgba(200,255,0,.15)}
+  .slot-live{border-color:#c8ff00!important;box-shadow:0 0 0 3px rgba(200,255,0,.2),0 0 40px rgba(200,255,0,.15)}
+  .marquee{overflow:hidden;white-space:nowrap}
+  .marquee span{display:inline-block;padding-right:3rem;animation:mq 22s linear infinite}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  .eq{display:inline-flex;gap:2px;align-items:flex-end;height:16px}
+  .eq i{width:3px;background:#c8ff00;animation:eq 1s ease-in-out infinite}
+  .eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}
+  @keyframes eq{0%,100%{height:4px}50%{height:16px}}
+</style>
+</head>
+<body class="min-h-screen">
+<div id="bg-layer"></div><div id="bg-overlay"></div>
+
+<!-- HEADER -->
+<header class="sticky top-0 z-20 border-b border-white/10 bg-black/70 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-[#c8ff00] grid place-items-center font-display text-black text-lg">OD</div>
+      <div>
+        <p class="font-display tracking-wide leading-none">OPEN-DECKS <span class="strobe">GENEVA</span></p>
+        <p class="text-xs text-zinc-400">Faire tourner ! · Genève + 50km · sets 30 min</p>
+      </div>
+    </div>
+    <nav class="hidden md:flex gap-5 text-sm text-zinc-300">
+      <a href="#inscription" class="hover:text-[#c8ff00]">Inscription</a>
+      <a href="#lineup" class="hover:text-[#c8ff00]">Line-Up</a>
+      <a href="#wallpaper" class="hover:text-[#c8ff00]">Fond d'écran</a>
+      <a href="#admin" class="hover:text-[#c8ff00]">Admin</a>
+    </nav>
+    <div id="clock" class="text-xs text-zinc-400 tabular-nums">--:--</div>
+  </div>
+  <div class="marquee border-t border-white/10 text-xs py-1 text-zinc-400">
+    <span id="marquee-text">OPEN DECKS GENEVA · JEUDI · 30 MIN PAR ARTISTE · TIRAGE AU SORT · PRIORITÉ AUX NOUVEAUX · WARMUP → HOUSE → TECHNO → BASS · RAMÈNE TES CLÉS USB · BIÈRE FRAÎCHE ·&nbsp;</span>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 pb-24">
+
+  <!-- HERO / INTRO -->
+  <section class="pt-10 grid md:grid-cols-2 gap-6 items-stretch">
+    <div class="card p-7">
+      <p class="text-xs tracking-[.3em] text-[#c8ff00] font-bold">SOIRÉES OPEN-DECKS · GENÈVE & ALENTOURS</p>
+      <h1 class="font-display text-4xl md:text-5xl mt-3 leading-tight">FAIRE<br><span class="strobe">TOURNER !</span></h1>
+      <p class="mt-4 text-zinc-300 text-sm leading-relaxed">
+        Web app événementielle pour les soirées <b>open-decks à Genève et alentours (rayon 50&nbsp;km)</b> :
+        connecter la communauté locale, partager de la musique et boire une bière.
+        Tu t'inscris, le <b>moteur de tirage au sort</b> construit le line-up en <b>sets de 30 minutes</b>,
+        avec <b>priorité aux DJs n'ayant pas encore joué</b> et un <b>enchaînement des styles</b>
+        (Warmup/Ambient → House/Disco → Techno/Bass → Hard).
+      </p>
+      <div class="flex gap-3 mt-6">
+        <a href="#inscription" class="btn-acid px-5 py-3 text-sm">S'inscrire au prochain set</a>
+        <a href="#lineup" class="btn-ghost px-5 py-3 text-sm">Voir le line-up</a>
+      </div>
+      <p class="mt-4 text-xs text-zinc-500">📍 Genève · base remise à zéro chaque semaine pour la session suivante.</p>
+    </div>
+    <div class="card p-7">
+      <h2 class="font-display text-lg">🎛️ MATÉRIEL SUR PLACE</h2>
+      <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+        <div class="rounded-xl border border-white/10 p-4 bg-black/40"><p class="text-2xl">💿</p><p class="font-bold mt-1">CDJ</p><p class="text-zinc-400 text-xs">Pioneer · clés USB / Rekordbox</p></div>
+        <div class="rounded-xl border border-white/10 p-4 bg-black/40"><p class="text-2xl">🎚️</p><p class="font-bold mt-1">Platines Technics</p><p class="text-zinc-400 text-xs">MK7 · vinyles bienvenus</p></div>
+        <div class="rounded-xl border border-white/10 p-4 bg-black/40"><p class="text-2xl">🎛️</p><p class="font-bold mt-1">Mixer</p><p class="text-zinc-400 text-xs">Table de mixage 4 voies</p></div>
+        <div class="rounded-xl border border-white/10 p-4 bg-black/40"><p class="text-2xl">🎤</p><p class="font-bold mt-1">Micro</p><p class="text-zinc-400 text-xs">MC, hype & dédicaces</p></div>
+      </div>
+      <div class="mt-4 rounded-xl border border-[#c8ff00]/30 bg-[#c8ff00]/5 p-4 text-xs text-zinc-300">
+        🍺 <b>Esprit :</b> pas de tête d'affiche, pas de guest-list — juste la communauté, des transitions propres et une bière fraîche.
+        Les nouveaux passent <b>en premier</b>.
+      </div>
+    </div>
+  </section>
+
+  <!-- INSCRIPTION -->
+  <section id="inscription" class="pt-10 grid md:grid-cols-2 gap-6">
+    <div class="card p-6">
+      <h2 class="font-display">1 · INSCRIPTION DJ</h2>
+      <p class="text-xs text-zinc-400 mt-1">Nom/Pseudo · Style · Téléphone/Email · Ville (50km autour de Genève)</p>
+      <form id="dj-form" class="mt-4 space-y-3">
+        <input id="f-pseudo" class="field" placeholder="Pseudo / Nom d'artiste *" maxlength="40" required />
+        <select id="f-style" class="field" required>
+          <option value="">— Style musical joué * —</option>
+          <option>Warmup</option><option>Ambient</option><option>Downtempo</option>
+          <option>House</option><option>Deep House</option><option>Tech-House</option>
+          <option>Disco</option><option>Funk</option><option>Minimal</option>
+          <option>Techno</option><option>Melodic Techno</option><option>Hard Techno</option>
+          <option>Bass</option><option>UK Garage</option><option>Drum & Bass</option>
+          <option>Jungle</option><option>Hip-Hop</option><option>Amapiano</option>
+          <option>Trance</option><option>Hardcore</option><option>Open / Freestyle</option>
+        </select>
+        <input id="f-contact" class="field" placeholder="Téléphone ou Email *" required />
+        <input id="f-city" class="field" list="cities" placeholder="Ville (ex: Genève, Annemasse, Nyon…) *" required />
+        <datalist id="cities"></datalist>
+        <div id="priority-hint" class="text-xs text-[#c8ff00] hidden">⚡ Nouveau profil → priorité automatique au tirage (jamais joué).</div>
+        <button class="btn-acid w-full py-3 text-sm" type="submit">Créer mon profil DJ</button>
+        <p id="dj-msg" class="text-xs"></p>
+      </form>
+    </div>
+    <div class="card p-6">
+      <h2 class="font-display">2 · REJOINDRE LA SESSION</h2>
+      <p class="text-xs text-zinc-400 mt-1">Sets de 30 minutes · l'ordre est tiré au sort</p>
+      <div class="mt-4 flex gap-2">
+        <select id="s-dj" class="field"><option value="">— Choisir ton profil —</option></select>
+        <button id="btn-signup" class="btn-acid px-5 text-sm whitespace-nowrap">+ 30 min</button>
+      </div>
+      <p id="signup-msg" class="text-xs mt-2"></p>
+      <h3 class="text-xs tracking-widest text-zinc-400 mt-5">FILE D'ATTENTE (<span id="queue-count">0</span>)</h3>
+      <ul id="queue" class="mt-2 space-y-2 text-sm"></ul>
+      <div class="mt-5 rounded-xl border border-white/10 p-3 text-xs text-zinc-400">
+        <b class="text-zinc-200">Comment marche le tirage ?</b><br>
+        ① Les DJs <b>nouveaux</b> (0 passage) passent d'abord ·
+        ② triés par <b>énergie du style</b> (warmup → hard) ·
+        ③ aléatoire à énergie égale. Les vétérans suivent, triés par nombre de passages.
+      </div>
+    </div>
+  </section>
+
+  <!-- LINEUP -->
+  <section id="lineup" class="pt-10">
+    <div class="card p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display">⏱️ LINE-UP & TIMETABLE <span class="text-xs font-body text-zinc-400">· temps réel · créneaux 30 min</span></h2>
+          <p id="lineup-meta" class="text-xs text-zinc-400 mt-1">En attente du tirage…</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="live-badge" class="hidden text-xs font-bold bg-[#c8ff00] text-black px-3 py-1.5 rounded-full"><span class="eq"><i></i><i></i><i></i><i></i></span> ON AIR</span>
+          <button id="btn-refresh" class="btn-ghost px-4 py-2 text-xs">↻ Actualiser</button>
+        </div>
+      </div>
+      <div id="now-playing" class="hidden mt-4 rounded-xl border border-[#c8ff00]/40 bg-[#c8ff00]/10 p-4 text-sm"></div>
+      <div id="timetable" class="mt-4 grid md:grid-cols-2 gap-3"></div>
+    </div>
+  </section>
+
+  <!-- WALLPAPER RAFFLE -->
+  <section id="wallpaper" class="pt-10 grid md:grid-cols-2 gap-6">
+    <div class="card p-6">
+      <h2 class="font-display">🖼️ RAFFLE FOND D'ÉCRAN</h2>
+      <p class="text-xs text-zinc-400 mt-1">Upload ton visuel — tirage au sort = fond du site</p>
+      <form id="wp-form" class="mt-4 space-y-3">
+        <input id="w-uploader" class="field" placeholder="Ton pseudo *" required maxlength="40" />
+        <input id="w-title" class="field" placeholder="Titre du visuel" maxlength="80" />
+        <input id="w-file" type="file" accept="image/*" class="field" required />
+        <button class="btn-acid w-full py-3 text-sm" type="submit">Participer au raffle</button>
+        <p id="wp-msg" class="text-xs"></p>
+      </form>
+      <div id="wp-active" class="mt-4 text-xs"></div>
+    </div>
+    <div class="card p-6">
+      <h3 class="text-xs tracking-widest text-zinc-400">GALERIE (<span id="wp-count">0</span>)</h3>
+      <div id="wp-grid" class="mt-3 grid grid-cols-2 gap-3"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="admin" class="pt-10">
+    <div class="card p-6 border-rose-500/30">
+      <h2 class="font-display">🔐 ADMIN · TIRAGE & PURGE</h2>
+      <div class="mt-3 flex flex-wrap gap-2 items-center">
+        <input id="a-key" type="password" class="field !w-56" placeholder="Clé admin" value="open-decks-admin" />
+        <input id="a-start" type="datetime-local" class="field !w-64" />
+        <button id="btn-draw" class="btn-acid px-4 py-2.5 text-xs">🎲 Tirer le line-up</button>
+        <button id="btn-wpdraw" class="btn-ghost px-4 py-2.5 text-xs">🖼️ Tirer le fond d'écran</button>
+        <button id="btn-reset" class="btn-ghost px-4 py-2.5 text-xs !border-red-500/60 hover:!text-red-400 hover:!border-red-400">🧹 Purge hebdo (nouvelle session)</button>
+      </div>
+      <p id="admin-msg" class="text-xs mt-2"></p>
+      <p class="text-[11px] text-zinc-500 mt-2">Draw = ordre de passage (nouveaux d'abord + enchaînement des styles). Purge = archive l'historique, +1 passage aux DJs joués, vide file + line-up. Auto chaque lundi 06:00.</p>
+    </div>
+  </section>
+
+  <footer class="pt-10 text-center text-xs text-zinc-500">
+    OPEN-DECKS GENEVA · faire tourner · CDJ · Technics · mixer · micro · 🍺 · <span id="year"></span>
+  </footer>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

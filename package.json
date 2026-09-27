@@ -1,0 +1,24 @@
+{
+  "name": "open-decks",
+  "version": "1.0.0",
+  "description": "Web App événementielle — soirées Open-Decks à Genève et alentours (50km)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "tunnel": "node tunnel.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@ngrok/ngrok": "^1.7.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "lowdb": "^7.0.1",
+    "multer": "^2.4.0",
+    "node-cron": "^4.6.0"
+  }
+}
